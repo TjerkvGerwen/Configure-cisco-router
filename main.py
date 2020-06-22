@@ -10,6 +10,14 @@ def telnet_connect():
     if tel_password:
         tn.read_until(b"Password: ")
         tn.write(tel_password.encode('ascii') + b"\n")
+    to_standardconf = input("Do u want to use the script for the standard config")
+    if to_standardconf == "yes" or to_standardconf == "Yes" or to_standardconf == "Y" or to_standardconf == "y" or to_standardconf == "YES":
+        print("-------------------------------------------------------------")
+        print("You chose yes")
+        telnet_standardconf()
+    else:
+        print("-------------------------------------------------------------")
+        print("The end")
 
 
 def telnet_standardconf():
@@ -45,6 +53,15 @@ def ssh_connect():
     # output = remote_connection.recv(10240)  # This is to recieve any output that you get on the after SSH
     # connection is established
     # ssh_client.close  # This closes your active SSH connection
+    to_standardconf = input("Do u want to use the script for the standard config")
+    if to_standardconf == "yes" or to_standardconf == "Yes" or to_standardconf == "Y" or to_standardconf == "y" or to_standardconf == "YES":
+        print("-------------------------------------------------------------")
+        print("You chose yes")
+        ssh_standardconf()
+    else:
+        print("-------------------------------------------------------------")
+        print("The end")
+
 
 
 def ssh_standardconf():
@@ -65,7 +82,6 @@ def ssh_standardconf():
     remote_connection.send("end\n")
     remote_connection.send("end\n")
     remote_connection.send("exit\n")
-    ssh_client.close
 
 
 def telnet_commands():

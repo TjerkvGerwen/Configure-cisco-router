@@ -113,6 +113,8 @@ elif CON_type == "S" or CON_type == "SSH" or CON_type == "ssh" or CON_type == "S
     ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh_name = input("Please enter UserName: ")
     ssh_password = input("Please enter Password: ")
+    ssh_client.connect(hostname=HOST, username=ssh_name,
+                       password=ssh_password)  # This is used to establish a connection
     ssh_connect
 else:
     print("-------------------------------------------------------------")

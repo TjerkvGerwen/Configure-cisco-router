@@ -1,6 +1,8 @@
 import sys
 import telnetlib
 import getpass
+import paramiko
+import time
 
 HOST = input("What is the IP adress: ")
 PORT = input("What is the port number: ")
@@ -18,7 +20,7 @@ def telnet_connect():
 def telnet_standardconf():
     print("-------------------------------------------------------------")
     standard_config_password = input("What is the password you want to use? ")
-    tn.write(b"enable secret " + standard_config_password)
+    tn.write(b"enable secret " + standard_config_password) # These commands are used to send command over
     tn.write(b"line vry 0 4")
     tn.write(b"password " + standard_config_password)
     tn.write(b"login")
@@ -35,7 +37,25 @@ def telnet_standardconf():
 
 
 def ssh_connect():
-    print("test")
+    ssh_name = input("Please enter UserName")
+    ssh_password = input("Please enter Password")
+    ssh_client = paramiko.SSHClient()
+    ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    ssh_client.connect(hostname=HOST, username=ssh_name, password=ssh_password)  # This is used to establish a connection
+
+    remote_connection = ssh_client.invoke_shell()  # This helps you invoke the shell of the client machine
+
+    remote_connection.send("cli\n")  # These commands are used to send command over
+
+    time.sleep(5)
+    output = remote_connection.recv(10240)  # This is to recieve any output that you get on the after SSH
+    # connection is established
+
+    ssh_client.close  # This closes your active SSH connection
+
+def ssh_standardconf():
+    print("-------------------------------------------------------------")
+    standard_config_password = input("What is the password you want to use? ")
 
 
 def telnet_commands():
@@ -47,7 +67,7 @@ def telnet_commands():
     if standard_config == "yes" or standard_config == "y" or standard_config == "Yes" or standard_config == "Y":
         telnet_standardconf()
     elif standard_config == "no" or standard_config == "No" or standard_config == "N" or standard_config == "NO":
-        print("someother config options")
+        print("some other config options")
 
 
 if CON_type == "T" or CON_type == "Telnet" or CON_type == "TELNET" or CON_type == "telnet":

@@ -4,11 +4,6 @@ import getpass
 import paramiko
 import time
 
-HOST = input("What is the IP adress: ")
-PORT = input("What is the port number: ")
-CON_type = input("Wil je een SSH of Telnet verbinding opzetten?(Keuze: T/S) ")
-
-
 def telnet_connect():
     tn.read_until(b"Username: ")
     tn.write(tel_user.encode('ascii') + b"\n")
@@ -84,6 +79,14 @@ def telnet_commands():
     elif standard_config == "no" or standard_config == "No" or standard_config == "N" or standard_config == "NO":
         print("some other config options")
 
+def help():
+    print("-------------------------------------------------------------")
+    print("You chose help")
+
+HOST = input("What is the IP adress: ")
+PORT = input("What is the port number: ")
+CON_type = input("Wil je een SSH of Telnet verbinding opzetten?(Keuze: T/S) ")
+helplist = ("OSPF","Interface","DHCP","setup ssh")
 
 if CON_type == "T" or CON_type == "Telnet" or CON_type == "TELNET" or CON_type == "telnet":  # TELNET
     print("-------------------------------------------------------------")

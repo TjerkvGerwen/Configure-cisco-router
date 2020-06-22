@@ -20,7 +20,7 @@ def telnet_connect():
 def telnet_standardconf():
     print("-------------------------------------------------------------")
     standard_config_password = input("What is the password you want to use? ")
-    tn.write(b"enable secret " + standard_config_password) # These commands are used to send command over
+    tn.write(b"enable secret " + standard_config_password)  # These commands are used to send command over
     tn.write(b"line vry 0 4")
     tn.write(b"password " + standard_config_password)
     tn.write(b"login")
@@ -33,7 +33,8 @@ def telnet_standardconf():
     tn.write(b"end\n")
     tn.write(b"end\n")
     tn.write(b"exit\n")
-    print(tn.read_all().decode('ascii'))
+    print(tn.read_all().decode('ascii'))  # This is to recieve any output that you get on the after Telnet
+    tn.close()
 
 
 def ssh_connect():
@@ -41,21 +42,35 @@ def ssh_connect():
     ssh_password = input("Please enter Password")
     ssh_client = paramiko.SSHClient()
     ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    ssh_client.connect(hostname=HOST, username=ssh_name, password=ssh_password)  # This is used to establish a connection
-
-    remote_connection = ssh_client.invoke_shell()  # This helps you invoke the shell of the client machine
-
-    remote_connection.send("cli\n")  # These commands are used to send command over
-
-    time.sleep(5)
-    output = remote_connection.recv(10240)  # This is to recieve any output that you get on the after SSH
+    ssh_client.connect(hostname=HOST, username=ssh_name,
+                       password=ssh_password)  # This is used to establish a connection
+    # remote_connection = ssh_client.invoke_shell()  # This helps you invoke the shell of the client machine
+    # remote_connection.send("cli\n")  # These commands are used to send command over
+    # time.sleep(5)
+    # output = remote_connection.recv(10240)  # This is to recieve any output that you get on the after SSH
     # connection is established
+    # ssh_client.close  # This closes your active SSH connection
 
-    ssh_client.close  # This closes your active SSH connection
 
 def ssh_standardconf():
     print("-------------------------------------------------------------")
     standard_config_password = input("What is the password you want to use? ")
+    remote_connection = ssh_client.invoke_shell()
+    remote_connection.send("cli\n")
+    remote_connection.send("enable secret " + standard_config_password)  # These commands are used to send command over
+    remote_connection.send("line vry 0 4")
+    remote_connection.send("password " + standard_config_password)
+    remote_connection.send("login")
+    remote_connection.send("line con 0")
+    remote_connection.send("password " + standard_config_password)
+    remote_connection.send("login")
+    remote_connection.send("exit")
+    remote_connection.send("service password-encryption")
+    remote_connection.send("copy run start")
+    remote_connection.send("end\n")
+    remote_connection.send("end\n")
+    remote_connection.send("exit\n")
+    ssh_client.close
 
 
 def telnet_commands():
@@ -70,7 +85,7 @@ def telnet_commands():
         print("some other config options")
 
 
-if CON_type == "T" or CON_type == "Telnet" or CON_type == "TELNET" or CON_type == "telnet":
+if CON_type == "T" or CON_type == "Telnet" or CON_type == "TELNET" or CON_type == "telnet":  # TELNET
     print("-------------------------------------------------------------")
     print("You chose Telnet")
     print("-------------------------------------------------------------")
@@ -79,13 +94,13 @@ if CON_type == "T" or CON_type == "Telnet" or CON_type == "TELNET" or CON_type =
     tn = telnetlib.Telnet(HOST, PORT)
     telnet_connect()
 
-elif CON_type == "S" or CON_type == "SSH" or CON_type == "ssh" or CON_type == "Ssh":
+elif CON_type == "S" or CON_type == "SSH" or CON_type == "ssh" or CON_type == "Ssh":  # SSH
     print("-------------------------------------------------------------")
     print("You chose SSH")
     print("-------------------------------------------------------------")
-
+    ssh_client = paramiko.SSHClient()
+    ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh_connect
-
-elif CON_type != "S" or CON_type != "T" or CON_type != "TELNET" or CON_type != "telnet" or CON_type != "ssh" or CON_type != "SSH":
+else:
     print("-------------------------------------------------------------")
     print("u did not make a choice please restart this application")

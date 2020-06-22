@@ -45,12 +45,6 @@ def ssh_connect():
     ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh_client.connect(hostname=HOST, username=ssh_name,
                        password=ssh_password)  # This is used to establish a connection
-    # remote_connection = ssh_client.invoke_shell()  # This helps you invoke the shell of the client machine
-    # remote_connection.send("cli\n")  # These commands are used to send command over
-    # time.sleep(5)
-    # output = remote_connection.recv(10240)  # This is to recieve any output that you get on the after SSH
-    # connection is established
-    # ssh_client.close  # This closes your active SSH connection
     to_standardconf = input("Do u want to use the script for the standard config")
     if to_standardconf == "yes" or to_standardconf == "Yes" or to_standardconf == "Y" or to_standardconf == "y" or to_standardconf == "YES":
         print("-------------------------------------------------------------")
@@ -117,8 +111,8 @@ elif CON_type == "S" or CON_type == "SSH" or CON_type == "ssh" or CON_type == "S
     print("-------------------------------------------------------------")
     ssh_client = paramiko.SSHClient()
     ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-    ssh_name = input("Please enter UserName")
-    ssh_password = input("Please enter Password")
+    ssh_name = input("Please enter UserName: ")
+    ssh_password = input("Please enter Password: ")
     ssh_connect
 else:
     print("-------------------------------------------------------------")

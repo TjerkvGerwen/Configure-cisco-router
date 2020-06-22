@@ -41,8 +41,6 @@ def telnet_standardconf():
 
 
 def ssh_connect():
-    ssh_name = input("Please enter UserName")
-    ssh_password = input("Please enter Password")
     ssh_client = paramiko.SSHClient()
     ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh_client.connect(hostname=HOST, username=ssh_name,
@@ -119,6 +117,8 @@ elif CON_type == "S" or CON_type == "SSH" or CON_type == "ssh" or CON_type == "S
     print("-------------------------------------------------------------")
     ssh_client = paramiko.SSHClient()
     ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    ssh_name = input("Please enter UserName")
+    ssh_password = input("Please enter Password")
     ssh_connect
 else:
     print("-------------------------------------------------------------")
